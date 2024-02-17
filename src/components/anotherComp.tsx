@@ -2,9 +2,10 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 
-const AnotherComp = () =>{
+const AnotherComp = (props:any) =>{
     const handleClick = ()=>{
         console.log("PRESSED!")
+        props.navigation.navigate("New")
     }
     return(
         <View style={styles.viewContainer}>
