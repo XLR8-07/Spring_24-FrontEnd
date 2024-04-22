@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import axios from "axios";
 
 const NewComponent = () => {
 
     const [name, setName] = useState("")
+    const [age, setAge] = useState(0)
+    const [address, setAddress] = useState("")
     const [country, setCountry] = useState(" ")
 
     const handleNameInput = (value: string) => {
         setName(value)
+    }
+    const handleAgeInput = (value: string) => {
+        setAge(+value)
+    }
+    const handleAddressInput = (value: string) => {
+        setAddress(value)
     }
 
     const handleSubmit = async () => {
@@ -20,11 +28,27 @@ const NewComponent = () => {
             setCountry(response.data.country[0].country_id)
         }
     }
+
+    const insertUser = async () => {
+        const newUser = {
+            name: name,
+            age: age,
+            address: address
+        }
+        const request_url = "http://10.10.202.46:3000/user/db"
+        const response = await axios.post(request_url, newUser)
+        console.log(response)
+    }
     return (
         <View style={style.container}>
             <Text style={style.countryContainer}>{country}</Text>
             <TextInput value={name} onChangeText={handleNameInput} style={style.inputContainer} placeholder="Enter Your Name" />
-            <Button onPress={handleSubmit} title="Submit"></Button>
+            <TextInput value={age.toString()} onChangeText={handleAgeInput} style={style.inputContainer} placeholder="Enter Your Age" />
+            <TextInput value={address} onChangeText={handleAddressInput} style={style.inputContainer} placeholder="Enter Your Address" />
+
+            <TouchableOpacity onPress={insertUser} style={style.buttonStyle}>
+                <Text style={style.textStyle}>Create User</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -48,6 +72,19 @@ const style = StyleSheet.create({
     },
     countryContainer: {
         fontSize: 40,
+        fontWeight: '700'
+    },
+    buttonStyle: {
+        marginTop: 15,
+        backgroundColor: "#288ff7",
+        borderRadius: 8,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 10,
+        paddingBottom: 10
+    },
+    textStyle: {
+        fontSize: 14,
         fontWeight: '700'
     }
 })
